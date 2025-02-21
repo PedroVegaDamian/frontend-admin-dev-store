@@ -1,0 +1,37 @@
+{
+	"name": "frontend-admin",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "run-p type-check \"build-only {@}\" --",
+		"preview": "vite preview",
+		"build-only": "vite build",
+		"type-check": "vue-tsc --build",
+		"check": "biome check",
+		"check:fix": "biome check --write"
+	},
+	"dependencies": {
+		"@quasar/extras": "^1.16.17",
+		"@tailwindcss/vite": "^4.0.7",
+		"pinia": "^3.0.1",
+		"quasar": "^2.17.7",
+		"tailwindcss": "^4.0.7",
+		"vue": "^3.5.13",
+		"vue-router": "^4.5.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@quasar/vite-plugin": "^1.9.0",
+		"@tsconfig/node22": "^22.0.0",
+		"@types/node": "^22.13.4",
+		"@vitejs/plugin-vue": "^5.2.1",
+		"@vue/tsconfig": "^0.7.0",
+		"npm-run-all2": "^7.0.2",
+		"typescript": "~5.7.3",
+		"vite": "^6.1.0",
+		"vue-tsc": "^2.2.2"
+	},
+	"packageManager": "pnpm@10.4.0+sha256.e57e8a544f7a84247cfa77dd6d923eae5199a373474e53eab1f540c796289386"
+}
