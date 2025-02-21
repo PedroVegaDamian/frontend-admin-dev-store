@@ -26,13 +26,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
+          cache: 'pnpm'
 
-      - name: Install pnpm
+      - name: Enable corepack and install pnpm
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
-          pnpm --version
+          pnpm --version  # Verifica que pnpm está instalado
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run linter, formatter and organize imports
         run: pnpm check:fix
