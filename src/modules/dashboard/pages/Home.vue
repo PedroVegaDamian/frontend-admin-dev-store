@@ -2,5 +2,5 @@
 
 <template>
   <h2>Home Page - Dashboard</h2>
-  <h3>Hello World Vue</h3>
+  <h3>Hola Mundo Vue</h3>
 </template>
