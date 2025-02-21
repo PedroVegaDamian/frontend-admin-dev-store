@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
 
     steps:
       - name: Checkout code
@@ -28,14 +28,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      - name: Enable corepack and install pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
-          pnpm --version  # Verifica que pnpm está instalado
-
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+      - name: Install pnpm manually
+        run: npm install -g pnpm
 
       - name: Run linter, formatter and organize imports
         run: pnpm check:fix
