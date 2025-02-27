@@ -2,12 +2,10 @@
 import { ref } from 'vue'
 
 import Header from '../components/TheHeader.vue';
-import Sidebar from '../components/SideBar.vue';
+import Sidebar from '../components/TheSidebar.vue';
 
 const drawer = ref(false)
 const miniState = ref(true)
-
-
 </script>
 
 <template>

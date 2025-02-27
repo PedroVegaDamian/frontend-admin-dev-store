@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { productsRoutes } from '../products/routes'
 
 export const dashboardRoutes: RouteRecordRaw[] = [
 	{
@@ -7,14 +8,10 @@ export const dashboardRoutes: RouteRecordRaw[] = [
 		children: [
 			{
 				path: '',
-				name: 'Dashboard',
+				name: 'dashboard',
 				component: () => import('@/modules/dashboard/pages/HomePage.vue')
 			},
-			{
-				path: 'products',
-				name: 'Productos',
-				component: () => import('@/modules/dashboard/pages/ProductsPage.vue')
-			},
+			...productsRoutes
 		]
 	}
 ]
