@@ -1,8 +1,7 @@
 <script setup lang="ts">
 const menuItems = [
-    { label: "Home", icon: "home", route: "/dashboard" },
-    { label: "Products", icon: "shopping_cart", route: "/dashboard/products" },
-    { label: "test", icon: "star", route: "/dashboard/example" },
+    { label: "Dashboard", icon: "home", route: "/dashboard" },
+    { label: "Productos", icon: "shopping_cart", route: "/dashboard/products" },
 ];
 </script>
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import RouterDashboard from './RouterDashboard.vue';
 
-
 defineProps<{ drawer: boolean, miniState: boolean, opacity?: string }>()
 
 const emit = defineEmits(['update:miniState', 'update:drawer'])

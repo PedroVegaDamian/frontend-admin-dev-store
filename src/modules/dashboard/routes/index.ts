@@ -7,19 +7,14 @@ export const dashboardRoutes: RouteRecordRaw[] = [
 		children: [
 			{
 				path: '',
-				name: 'home',
-				component: () => import('@/modules/dashboard/pages/Home.vue')
+				name: 'Dashboard',
+				component: () => import('@/modules/dashboard/pages/HomePage.vue')
 			},
 			{
 				path: 'products',
-				name: 'products',
-				component: () => import('@/modules/dashboard/pages/Example.vue')
+				name: 'Productos',
+				component: () => import('@/modules/dashboard/pages/ProductsPage.vue')
 			},
-			{
-				path: 'example',
-				name: 'example',
-				component: () => import('@/modules/dashboard/pages/Example.vue')
-			}
 		]
 	}
 ]

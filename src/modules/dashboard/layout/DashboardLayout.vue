@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 
-import Header from '../components/Header.vue';
-import Sidebar from '../components/Sidebar.vue';
+import Header from '../components/TheHeader.vue';
+import Sidebar from '../components/SideBar.vue';
 
-  const drawer = ref(false)
-  const miniState = ref(true)
+const drawer = ref(false)
+const miniState = ref(true)
 
 
 </script>
@@ -16,13 +16,13 @@ import Sidebar from '../components/Sidebar.vue';
 
       <Header v-model:drawer="drawer" />
 
-      <Sidebar  v-model:drawer="drawer" v-model:miniState="miniState" />
+      <Sidebar v-model:drawer="drawer" v-model:miniState="miniState" />
 
       <q-page-container>
         <q-page padding>
 
-        <RouterView />
-       
+          <RouterView />
+
         </q-page>
       </q-page-container>
     </q-layout>
