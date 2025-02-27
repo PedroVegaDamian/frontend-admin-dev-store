@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import Header from '../components/TheHeader.vue';
 import Sidebar from '../components/TheSidebar.vue';
 
-const drawer = ref(false)
+const drawer = ref(true)
 const miniState = ref(true)
 </script>
 
