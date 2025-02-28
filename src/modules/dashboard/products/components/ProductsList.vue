@@ -1,73 +1,129 @@
 <script setup lang="ts">
+  import { onMounted, ref } from "vue";
+  import { getProducts } from "../services";
+  import { date, type QTableProps } from "quasar";
+  import type { Product } from "../interfaces/product";
 
-import { onMounted, ref } from 'vue';
+  const dataProducts = ref<Product[]>([]);
 
-const dataProducts = ref([]);
-
-const getProducts = async () => {
-    const response = await fetch("https://lexical-josey-pedrovega-df4ea41e.koyeb.app/api/products");
-    const data = await response.json();
-    console.log(data);
-    return data;
-}
-
-onMounted(async () => {
-    const data = await getProducts();
-    dataProducts.value = data;
-})
-
-
-const columns = [
+  const columns: QTableProps["columns"] = [
     {
-        name: 'name',
-        required: true,
-        label: 'Dessert (100g serving)',
-        align: 'left',
-        field: (row: any) => row.name,
-        format: (val: string) => `${val}`,
-        sortable: true
+      name: "_id",
+      label: "ID",
+      field: "_id",
+      align: "center",
     },
+    {
+      name: "image",
+      label: "Imagen",
+      field: "image",
+      align: "center",
+    },
+    {
+      name: "name",
+      label: "Nombre",
+      field: "name",
+      align: "center",
+      sortable: true,
+    },
+    {
+      name: "category",
+      label: "Categoria",
+      field: "category",
+      align: "center",
+      sortable: true,
+    },
+    {
+      name: "price",
+      label: "Precio",
+      field: "price",
+      align: "center",
+      sortable: true,
+      format: (val) =>
+        new Intl.NumberFormat("es-PE", {
+          style: "currency",
+          currency: "PEN",
+        }).format(val),
+    },
+    {
+      name: "stock",
+      label: "Stock",
+      field: "stock",
+      align: "center",
+      sortable: true,
+    },
+    {
+      name: "createdAt",
+      label: "Fecha Creación",
+      field: "createdAt",
+      align: "center",
+      format: (val) => date.formatDate(val, "DD/MM/YYYY HH:mm:ss"),
+    },
+    {
+      name: "updatedAt",
+      label: "Fecha Actualización",
+      field: "updatedAt",
+      align: "center",
+      format: (val) => date.formatDate(val, "DD/MM/YYYY HH:mm:ss"),
+    },
+    {
+      name: "actions",
+      label: "Acciones",
+      field: "actions",
+      align: "center",
+    },
+  ];
 
-    { name: 'category', align: 'center', label: 'Categoria', field: 'category', sortable: true },
-    // { name: 'cojines', label: 'Cojines', field: 'fat', sortable: true },
-    { name: 'createdAt', label: 'Fecha', field: 'createdAt' },
-    // { name: 'image', label: '', field: 'protein' },
-    { name: 'price', label: 'Precio', field: 'price' },
-    { name: 'stock', label: 'Stock', field: 'stock', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-    { name: 'updatedAt', label: 'Fecha Actualización', field: 'updatedAt', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-]
+  const visibleColumns = columns
+    .map((col) => col.name)
+    .filter((col) => col !== "_id");
 
+  const handleEditProduct = (product: Product) => {
+    console.log({ ...product });
+  };
 
+  const handleDeleteProduct = (product: Product) => {
+    console.log({ ...product });
+  };
+
+  onMounted(async () => {
+    const products = await getProducts();
+    dataProducts.value = products;
+  });
 </script>
 
 <template>
-    <div class="q-pa-md">
-        <q-table class="my-sticky-last-column-table" flat bordered title="Treats" :rows="dataProducts"
-            :columns="columns" row-key="name" />
-    </div>
+  <div class="q-pa-md">
+    <q-table
+      row-key="_id"
+      title="Productos"
+      :columns="columns"
+      :rows="dataProducts"
+      :visible-columns="visibleColumns"
+    >
+      <template v-slot:body-cell-image="props">
+        <td class="text-center">
+          <q-avatar>
+            <img :src="props.value" :alt="props.row.name" />
+          </q-avatar>
+        </td>
+      </template>
+      <template v-slot:body-cell-actions="props">
+        <td class="text-center">
+          <q-btn
+            flat
+            icon="edit"
+            color="warning"
+            @click="handleEditProduct(props.row)"
+          />
+          <q-btn
+            flat
+            icon="delete"
+            color="negative"
+            @click="handleDeleteProduct(props.row)"
+          />
+        </td>
+      </template>
+    </q-table>
+  </div>
 </template>
-
-
-<style>
-.my-sticky-last-column-table {
-    /* specifying max-width so the example can
-highlight the sticky column on any browser window */
-    max-width: 600px;
-}
-
-.my-sticky-last-column-table thead tr:last-child th:last-child {
-    /* bg color is important for th; just specify one */
-    background-color: #00b4ff;
-}
-
-.my-sticky-last-column-table td:last-child {
-    background-color: #00b4ff;
-}
-
-.my-sticky-last-column-table th:last-child,
-.my-sticky-last-column-table td:last-child {
-    position: sticky;
-    right: 0;
-    z-index: 1;
-}
-</style>
