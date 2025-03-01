@@ -1,8 +1,15 @@
 <script setup lang="ts">
-  import { date, type QTableProps } from "quasar";
+  import { type QTableProps, date } from "quasar";
   import { useProducts } from "../composables/useProducts";
 
-  const { products, editProduct, deleteProductById } = useProducts();
+  const {
+    error,
+    products,
+    isLoading,
+    pagination,
+    editProduct,
+    deleteProductById,
+  } = useProducts();
 
   const columns: QTableProps["columns"] = [
     {
@@ -79,13 +86,24 @@
 
 <template>
   <div class="q-pa-md">
+    <p v-if="error" class="text-red-500">{{ error }}</p>
+
     <q-table
       row-key="_id"
       title="Productos"
-      :rows="products"
-      :loading="false"
       :columns="columns"
+      :loading="isLoading"
+      separator="vertical"
+      :rows="products.data"
+      v-model:pagination="pagination"
       :visible-columns="visibleColumns"
+      :rows-per-page-options="[5, 10, 20, 50]"
+      @request="
+        (props) => {
+          pagination.page = props.pagination.page;
+          pagination.rowsPerPage = props.pagination.rowsPerPage;
+        }
+      "
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />

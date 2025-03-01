@@ -1,11 +1,38 @@
-import { onMounted, ref } from "vue";
+import { ref, watch } from "vue";
 
-import { getProducts } from "../services";
-import type { Product } from "../interfaces/product";
 import { useToastNotification } from "@/shared/composables/useToastNotification";
+import { useQuery } from "@pinia/colada";
+import type { Product } from "../interfaces/product";
+import { getProducts } from "../services";
 
 export const useProducts = () => {
-  const products = ref<Product[]>([]);
+  const pagination = ref({
+    page: 1,
+    rowsNumber: 0,
+    rowsPerPage: 5,
+  });
+
+  const {
+    error,
+    isLoading,
+    data: products,
+  } = useQuery({
+    key: () => [
+      "products",
+      pagination.value.page,
+      pagination.value.rowsPerPage,
+    ],
+    query: () =>
+      getProducts({
+        limit: pagination.value.rowsPerPage,
+        offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
+      }),
+    refetchOnWindowFocus: false,
+    placeholderData: {
+      data: [],
+      total: 0,
+    },
+  });
 
   const { toastNotification } = useToastNotification();
 
@@ -19,20 +46,26 @@ export const useProducts = () => {
 
   const deleteProductById = async (_id: Product["_id"]) => {
     // TODO: Implementar request DELETE, averiguar por que lanza el warinig
-    products.value = products.value.filter((item) => item._id !== _id);
+    // products.value = products.value.filter((item) => item._id !== _id);
     toastNotification({
       message: "Producto Eliminado",
       color: "red",
     });
   };
 
-  onMounted(async () => {
-    const dataProducts = await getProducts();
-    products.value = dataProducts;
-  });
+  watch(
+    products,
+    () => {
+      pagination.value.rowsNumber = products.value.total;
+    },
+    { once: true }
+  );
 
   return {
+    error,
     products,
+    isLoading,
+    pagination,
     editProduct,
     deleteProductById,
   };

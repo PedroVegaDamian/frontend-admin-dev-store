@@ -13,6 +13,7 @@
 		"check:fix": "biome check --write"
 	},
 	"dependencies": {
+		"@pinia/colada": "^0.13.6",
 		"@quasar/extras": "^1.16.17",
 		"@tailwindcss/vite": "^4.0.7",
 		"pinia": "^3.0.1",
