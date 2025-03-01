@@ -1,14 +1,26 @@
 <script setup lang="ts">
+  interface Props {
+    drawer: boolean;
+  }
 
-defineProps<{ drawer: boolean }>()
+  interface Emits {
+    (e: "update:drawer", drawer: boolean): void;
+  }
 
-const emit = defineEmits(['update:drawer'])
+  const props = defineProps<Props>();
+  const emit = defineEmits<Emits>();
 </script>
 
 <template>
   <q-header elevated :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'">
     <q-toolbar>
-      <q-btn flat @click="emit('update:drawer', !drawer)" round dense icon="menu" />
+      <q-btn
+        flat
+        round
+        dense
+        icon="menu"
+        @click="emit('update:drawer', !props.drawer)"
+      />
       <q-toolbar-title>Dev Store</q-toolbar-title>
     </q-toolbar>
   </q-header>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import ToastNotification from "@/shared/components/ToastNotification.vue";
-import ProductsList from "../components/ProductsList.vue";
+  import ProductsList from "../components/ProductList.vue";
 </script>
 
 <template>
