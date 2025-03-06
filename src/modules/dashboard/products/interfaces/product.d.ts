@@ -14,3 +14,11 @@ export enum Category {
   Hombre = "hombre",
   Mousepad = "mousepad",
 }
+
+export interface AddProduct {
+  image: string | null;
+  name: string | null;
+  category: Category | null;
+  price: number | null;
+  stock: number | null;
+}

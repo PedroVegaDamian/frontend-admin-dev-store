@@ -2,8 +2,8 @@ import { ref, watch } from "vue";
 
 import { useToastNotification } from "@/shared/composables/useToastNotification";
 import { useQuery } from "@pinia/colada";
-import type { Product } from "../interfaces/product";
-import { getProducts } from "../services";
+import type { AddProduct, Product } from "../interfaces/product";
+import { addProduct, deleteProductById, getProducts } from "../services";
 
 export const useProducts = () => {
   const pagination = ref({
@@ -16,6 +16,7 @@ export const useProducts = () => {
     error,
     isLoading,
     data: products,
+    refresh,
   } = useQuery({
     key: () => [
       "products",
@@ -44,13 +45,34 @@ export const useProducts = () => {
     });
   };
 
-  const deleteProductById = async (_id: Product["_id"]) => {
-    // TODO: Implementar request DELETE, averiguar por que lanza el warinig
-    // products.value = products.value.filter((item) => item._id !== _id);
-    toastNotification({
-      message: "Producto Eliminado",
-      color: "red",
-    });
+  const deleteOneProduct = async (_id: Product["_id"]) => {
+    try {
+      const productDeleted = await deleteProductById(_id);
+
+      refresh();
+
+      toastNotification({
+        message: `Producto Eliminado: ${productDeleted.name}`,
+        color: "red",
+      });
+    } catch (error) {
+      throw new Error("Ocurred an error");
+    }
+  };
+
+  const addOneProduct = async (product: AddProduct) => {
+    try {
+      const addedProduct = await addProduct(product);
+
+      refresh();
+
+      toastNotification({
+        message: `Producto Agregado: ${addedProduct.name}`,
+        color: "green",
+      });
+    } catch (error) {
+      throw new Error("Ocurred an error al agregar producto");
+    }
   };
 
   watch(
@@ -67,6 +89,7 @@ export const useProducts = () => {
     isLoading,
     pagination,
     editProduct,
-    deleteProductById,
+    addOneProduct,
+    deleteOneProduct,
   };
 };
