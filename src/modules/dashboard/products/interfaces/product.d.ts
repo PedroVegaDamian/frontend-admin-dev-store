@@ -9,16 +9,12 @@ export interface Product {
   updatedAt: Date;
 }
 
+export type ProductDto = Partial<
+  Omit<Product, "_id" | "createdAt" | "updatedAt">
+>;
+
 export enum Category {
   Cojines = "cojines",
   Hombre = "hombre",
   Mousepad = "mousepad",
-}
-
-export interface AddProduct {
-  image: string | null;
-  name: string | null;
-  category: Category | null;
-  price: number | null;
-  stock: number | null;
 }

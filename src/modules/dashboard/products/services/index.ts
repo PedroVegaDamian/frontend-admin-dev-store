@@ -1,4 +1,4 @@
-import type { AddProduct, Product } from "../interfaces/product";
+import type { Product, ProductDto } from "../interfaces/product";
 
 const { VITE_API_URL } = import.meta.env;
 
@@ -35,7 +35,7 @@ export const deleteProductById = async (_id: Product["_id"]) => {
   }
 };
 
-export const addProduct = async (product: AddProduct) => {
+export const addProduct = async (product: ProductDto) => {
   try {
     const response = await fetch(`${VITE_API_URL}/products`, {
       method: "POST",
@@ -45,10 +45,9 @@ export const addProduct = async (product: AddProduct) => {
       body: JSON.stringify(product),
     });
 
-    console.log(response);
-    if (!response.ok) {
+    if (!response.ok)
       throw new Error(`Error al agregar prodcuto: ${response.statusText}`);
-    }
+
     const data = await response.json();
     return data as Product;
   } catch (error) {

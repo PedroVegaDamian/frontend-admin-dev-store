@@ -1,8 +1,8 @@
 import { ref, watch } from "vue";
 
 import { useToastNotification } from "@/shared/composables/useToastNotification";
-import { useQuery } from "@pinia/colada";
-import type { AddProduct, Product } from "../interfaces/product";
+import { useMutation, useQuery } from "@pinia/colada";
+import type { Product, ProductDto } from "../interfaces/product";
 import { addProduct, deleteProductById, getProducts } from "../services";
 
 export const useProducts = () => {
@@ -35,6 +35,14 @@ export const useProducts = () => {
     },
   });
 
+  const { mutateAsync: deleteProduct } = useMutation({
+    mutation: (_id: Product["_id"]) => deleteProductById(_id),
+  });
+
+  const { mutateAsync: addNewProduct } = useMutation({
+    mutation: (product: ProductDto) => addProduct(product),
+  });
+
   const { toastNotification } = useToastNotification();
 
   const editProduct = (product: Product) => {
@@ -47,7 +55,7 @@ export const useProducts = () => {
 
   const deleteOneProduct = async (_id: Product["_id"]) => {
     try {
-      const productDeleted = await deleteProductById(_id);
+      const productDeleted = await deleteProduct(_id);
 
       refresh();
 
@@ -60,18 +68,18 @@ export const useProducts = () => {
     }
   };
 
-  const addOneProduct = async (product: AddProduct) => {
+  const addOneProduct = async (product: ProductDto) => {
     try {
-      const addedProduct = await addProduct(product);
+      const productAdded = await addNewProduct(product);
 
       refresh();
 
       toastNotification({
-        message: `Producto Agregado: ${addedProduct.name}`,
+        message: `Producto Agregado: ${productAdded.name}`,
         color: "green",
       });
     } catch (error) {
-      throw new Error("Ocurred an error al agregar producto");
+      throw new Error("An error occurred while adding product");
     }
   };
 
