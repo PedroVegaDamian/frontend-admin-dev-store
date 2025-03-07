@@ -1,8 +1,7 @@
 import { ref, watch } from "vue";
 
-import { useToastNotification } from "@/shared/composables/useToastNotification";
 import { useQuery } from "@pinia/colada";
-import type { Product, ProductDto } from "../interfaces/product";
+import type { Product } from "../interfaces/product";
 import { getProducts } from "../services";
 import { useCreateProduct } from "./useCreateProduct";
 import { useDeleteProduct } from "./useDeleteProduct";
@@ -40,49 +39,15 @@ export const useProducts = () => {
 
   const { createProduct, productCreated } = useCreateProduct();
   const { deleteProduct, productDeleted } = useDeleteProduct();
-  const { toastNotification } = useToastNotification();
 
   const editProduct = (product: Product) => {
     // TODO: Implementar request PATCH
-    toastNotification({
-      message: "Producto Actualizado",
-      color: "orange",
-    });
-  };
-
-  const deleteOneProduct = async (_id: Product["_id"]) => {
-    try {
-      await deleteProduct(_id);
-
-      await refresh();
-
-      toastNotification({
-        message: `Producto Eliminado: ${productDeleted.value?.name}`,
-        color: "red",
-      });
-    } catch (error) {
-      throw new Error("Ocurred an error");
-    }
-  };
-
-  const addOneProduct = async (product: ProductDto) => {
-    try {
-      await createProduct(product);
-
-      await refresh();
-
-      toastNotification({
-        message: `Producto Agregado: ${productCreated.value?.name}`,
-        color: "green",
-      });
-    } catch (error) {
-      throw new Error("An error occurred while adding product");
-    }
   };
 
   watch(
     () => [products.value.data, productDeleted.value, productCreated.value],
     () => {
+      refresh();
       if (!products.value.total) return;
       pagination.value.rowsNumber = products.value.total;
     }
@@ -94,7 +59,7 @@ export const useProducts = () => {
     isLoading,
     pagination,
     editProduct,
-    addOneProduct,
-    deleteOneProduct,
+    addOneProduct: createProduct,
+    deleteOneProduct: deleteProduct,
   };
 };
