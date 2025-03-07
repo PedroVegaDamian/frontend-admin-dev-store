@@ -1,17 +1,19 @@
 import { ref, watch } from "vue";
 
 import { useToastNotification } from "@/shared/composables/useToastNotification";
-import { useMutation, useQuery } from "@pinia/colada";
+import { useQuery } from "@pinia/colada";
 import type { Product, ProductDto } from "../interfaces/product";
-import { addProduct, deleteProductById, getProducts } from "../services";
+import { getProducts } from "../services";
+import { useCreateProduct } from "./useCreateProduct";
+import { useDeleteProduct } from "./useDeleteProduct";
+
+const pagination = ref({
+  page: 1,
+  rowsNumber: 0,
+  rowsPerPage: 5,
+});
 
 export const useProducts = () => {
-  const pagination = ref({
-    page: 1,
-    rowsNumber: 0,
-    rowsPerPage: 5,
-  });
-
   const {
     error,
     isLoading,
@@ -28,6 +30,7 @@ export const useProducts = () => {
         limit: pagination.value.rowsPerPage,
         offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
       }),
+    staleTime: 0,
     refetchOnWindowFocus: false,
     placeholderData: {
       data: [],
@@ -35,14 +38,8 @@ export const useProducts = () => {
     },
   });
 
-  const { mutateAsync: deleteProduct } = useMutation({
-    mutation: (_id: Product["_id"]) => deleteProductById(_id),
-  });
-
-  const { mutateAsync: addNewProduct } = useMutation({
-    mutation: (product: ProductDto) => addProduct(product),
-  });
-
+  const { createProduct, productCreated } = useCreateProduct();
+  const { deleteProduct, productDeleted } = useDeleteProduct();
   const { toastNotification } = useToastNotification();
 
   const editProduct = (product: Product) => {
@@ -55,12 +52,12 @@ export const useProducts = () => {
 
   const deleteOneProduct = async (_id: Product["_id"]) => {
     try {
-      const productDeleted = await deleteProduct(_id);
+      await deleteProduct(_id);
 
-      refresh();
+      await refresh();
 
       toastNotification({
-        message: `Producto Eliminado: ${productDeleted.name}`,
+        message: `Producto Eliminado: ${productDeleted.value?.name}`,
         color: "red",
       });
     } catch (error) {
@@ -70,12 +67,12 @@ export const useProducts = () => {
 
   const addOneProduct = async (product: ProductDto) => {
     try {
-      const productAdded = await addNewProduct(product);
+      await createProduct(product);
 
-      refresh();
+      await refresh();
 
       toastNotification({
-        message: `Producto Agregado: ${productAdded.name}`,
+        message: `Producto Agregado: ${productCreated.value?.name}`,
         color: "green",
       });
     } catch (error) {
@@ -84,11 +81,11 @@ export const useProducts = () => {
   };
 
   watch(
-    products,
+    () => [products.value.data, productDeleted.value, productCreated.value],
     () => {
+      if (!products.value.total) return;
       pagination.value.rowsNumber = products.value.total;
-    },
-    { once: true }
+    }
   );
 
   return {
