@@ -9,12 +9,8 @@ export interface Product {
   updatedAt: Date;
 }
 
+export type Category = "cojines" | "hombre" | "mousepad" | "";
+
 export type ProductDto = Partial<
   Omit<Product, "_id" | "createdAt" | "updatedAt">
 >;
-
-export enum Category {
-  Cojines = "cojines",
-  Hombre = "hombre",
-  Mousepad = "mousepad",
-}

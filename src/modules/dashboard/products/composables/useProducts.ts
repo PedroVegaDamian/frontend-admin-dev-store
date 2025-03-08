@@ -1,10 +1,9 @@
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
-import { useQuery } from "@pinia/colada";
 import type { Product } from "../interfaces/product";
-import { getProducts } from "../services";
 import { useCreateProduct } from "./useCreateProduct";
 import { useDeleteProduct } from "./useDeleteProduct";
+import { useGetProducts } from "./useGetProducts";
 
 const pagination = ref({
   page: 1,
@@ -13,30 +12,12 @@ const pagination = ref({
 });
 
 export const useProducts = () => {
-  const {
-    error,
-    isLoading,
-    data: products,
-    refresh,
-  } = useQuery({
-    key: () => [
-      "products",
-      pagination.value.page,
-      pagination.value.rowsPerPage,
-    ],
-    query: () =>
-      getProducts({
-        limit: pagination.value.rowsPerPage,
-        offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
-      }),
-    staleTime: 0,
-    refetchOnWindowFocus: false,
-    placeholderData: {
-      data: [],
-      total: 0,
-    },
-  });
+  const queryParams = computed(() => ({
+    limit: pagination.value.rowsPerPage,
+    offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
+  }));
 
+  const { error, isLoading, products, refresh } = useGetProducts(queryParams);
   const { createProduct, productCreated } = useCreateProduct();
   const { deleteProduct, productDeleted } = useDeleteProduct();
 
@@ -44,10 +25,11 @@ export const useProducts = () => {
     // TODO: Implementar request PATCH
   };
 
+  // TODO: refactorizar y legibilizar
   watch(
     () => [products.value.data, productDeleted.value, productCreated.value],
-    () => {
-      refresh();
+    async () => {
+      await refresh();
       if (!products.value.total) return;
       pagination.value.rowsNumber = products.value.total;
     }

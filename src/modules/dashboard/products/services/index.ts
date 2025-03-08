@@ -2,18 +2,16 @@ import type { Product, ProductDto } from "../interfaces/product";
 
 const { VITE_API_URL } = import.meta.env;
 
-interface QueryParams {
+export interface QueryParams {
   limit?: number;
   offset?: number;
 }
 
 export const getProducts = async (queryParams: QueryParams) => {
   try {
-    const { limit = 10, offset = 0 } = queryParams;
-
     const response = await fetch(
-      `${VITE_API_URL}/products?limit=${limit}${
-        offset ? `&offset=${offset}` : ""
+      `${VITE_API_URL}/products?limit=${queryParams.limit}${
+        queryParams.offset ? `&offset=${queryParams.offset}` : ""
       }`
     );
     const data = await response.json();
