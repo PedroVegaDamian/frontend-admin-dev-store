@@ -1,18 +1,37 @@
 <script setup lang="ts">
-import BaseModal from "@/shared/components/BaseModal.vue";
-import { ref } from "vue";
-import FormCreateProduct from "../components/FormCreateProduct.vue";
-import ProductsList from "../components/ProductList.vue";
+  import { default as ProductCreateModal } from "@/shared/components/BaseModal.vue";
+  import { ref } from "vue";
+  import ProductForm from "../components/ProductForm.vue";
+  import ProductsList from "../components/ProductList.vue";
+  import { useFormCreateProduct } from "../composables/useFormCreateProduct";
 
-const showDialog = ref(false);
+  const isShowProductCreateModal = ref(false);
+  const { newProduct, onReset, onSubmit } = useFormCreateProduct();
+
+  const handleSubmit = async () => {
+    await onSubmit();
+    isShowProductCreateModal.value = false;
+  };
 </script>
 
 <template>
   <div class="flex justify-end mr-4">
-    <BaseModal title="Nuevo Producto" type="button" color="primary" v-model="showDialog"
-      @open-dialog="showDialog = true">
-      <FormCreateProduct @closed-dialog="showDialog = false" />
-    </BaseModal>
+    <q-btn
+      no-caps
+      color="primary"
+      label="Agregar Producto"
+      @click="isShowProductCreateModal = true"
+    />
+    <ProductCreateModal
+      @trigger-hide="onReset"
+      v-model="isShowProductCreateModal"
+    >
+      <ProductForm
+        @on-reset="onReset"
+        @on-submit="handleSubmit"
+        v-model="newProduct"
+      />
+    </ProductCreateModal>
   </div>
 
   <ProductsList />

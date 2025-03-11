@@ -13,8 +13,8 @@ export const useDeleteProduct = () => {
   watch(productDeleted, () => {
     if (productDeleted.value) {
       toastNotification({
-        message: `Producto Eliminado: ${productDeleted.value?.name}`,
         color: "red",
+        message: `Producto Eliminado: ${productDeleted.value?.name}`,
       });
     }
   });

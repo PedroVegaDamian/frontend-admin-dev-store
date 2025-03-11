@@ -14,8 +14,8 @@ export const useCreateProduct = () => {
   watch(productCreated, () => {
     if (productCreated.value) {
       toastNotification({
-        message: `Producto Agregado: ${productCreated.value?.name}`,
         color: "green",
+        message: `Producto Agregado: ${productCreated.value?.name}`,
       });
     }
   });

@@ -53,9 +53,9 @@ export const addProduct = async (product: ProductDto) => {
   }
 };
 
-export const editProduct = async (product: ProductDto) => {
+export const editProduct = async (product: ProductDto, _id: Product["_id"]) => {
   try {
-    const response = await fetch(`${VITE_API_URL}/products`, {
+    const response = await fetch(`${VITE_API_URL}/products/${_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

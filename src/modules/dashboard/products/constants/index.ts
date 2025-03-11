@@ -1,6 +1,6 @@
 import type { Category, ProductDto } from "../interfaces/product";
 
-export const defaultProductDto: ProductDto = {
+export const defaultProductDto: Required<ProductDto> = {
   name: "",
   image: "",
   category: "",
