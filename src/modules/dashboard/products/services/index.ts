@@ -52,3 +52,23 @@ export const addProduct = async (product: ProductDto) => {
     throw new Error("Error al agregar producto");
   }
 };
+
+export const editProduct = async (product: ProductDto) => {
+  try {
+    const response = await fetch(`${VITE_API_URL}/products`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    });
+
+    if (!response.ok)
+      throw new Error(`Error al editar prodcuto: ${response.statusText}`);
+
+    const data = await response.json();
+    return data as Product;
+  } catch (error) {
+    throw new Error("Error al editar producto");
+  }
+};

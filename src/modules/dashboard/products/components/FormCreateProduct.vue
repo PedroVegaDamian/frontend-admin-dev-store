@@ -1,135 +1,42 @@
 <script setup lang="ts">
-  import { useToastNotification } from "@/shared/composables/useToastNotification";
-  import { reactive } from "vue";
-  import { useProducts } from "../composables/useProducts";
-  import type { Category, ProductDto } from "../interfaces/product";
+import { useFormCreateProduct } from '../composables/useFormCreateProduct';
+import { categoryOptions } from '../constants';
+import type { EmitClosedDialog, ProductDto } from '../interfaces/product';
 
-  type Emits = (e: "closed-dialog") => void;
+interface Props {
+  product: ProductDto
+}
 
-  const emit = defineEmits<Emits>();
+const props = defineProps<Props>();
+console.log(props.product.name)
+const emit = defineEmits<EmitClosedDialog>();
 
-  const newProduct = reactive<ProductDto>({
-    name: "",
-    image: "",
-    category: "",
-    price: 0,
-    stock: 0,
-  });
 
-  const categoryOptions: Category[] = ["cojines", "hombre", "mousepad"];
+const { onSubmit, onReset, newProduct, errors } = useFormCreateProduct(emit, props.product)
 
-  const { addOneProduct } = useProducts();
-  const { toastNotification } = useToastNotification();
-
-  const onSubmit = async () => {
-    const haveName = !!newProduct.name?.trim();
-    const haveUrlImage = !!newProduct.image?.trim();
-    const haveCategory = !!newProduct.category?.trim();
-    const havePrice = !!(newProduct.price ?? 0);
-    const haveStock = !!(newProduct.stock ?? 0);
-
-    if (
-      !haveName ||
-      !haveUrlImage ||
-      !haveCategory ||
-      !havePrice ||
-      !haveStock
-    ) {
-      toastNotification({
-        message: "Por favor, complete todos los campos obligatorios",
-        color: "red",
-      });
-    }
-
-    await addOneProduct(newProduct);
-
-    emit("closed-dialog");
-  };
-
-  const onReset = () => {
-    newProduct.name = "";
-    newProduct.image = "";
-    newProduct.category = "";
-    newProduct.price = 0;
-    newProduct.stock = 0;
-  };
 </script>
 
 <template>
   <div class="q-pa-md sm:w-[450px]" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input
-        filled
-        lazy-rules
-        label="Nombre *"
-        v-model="newProduct.name"
-        hint="Agregar nombre de Producto"
-        :rules="[
-          (val) => (val && val.length > 0) || 'Por favor tipear un nombre',
-        ]"
-      />
+      <q-input filled lazy-rules label="Nombre *" v-model="newProduct.name" hint="Agregar nombre de Producto"
+        :error="!!errors.name" :error-message="errors.name" />
 
-      <q-input
-        filled
-        label="Url Imagen *"
-        v-model="newProduct.image"
-        hint="Agregar un Link de imagen para el Producto"
-        lazy-rules
-        :rules="[
-          (val) => (val && val.length > 0) || 'Por favor ingrese un link',
-          (val) =>
-            /^(https?:\/\/.*)$/.test(val) || 'Ingrese una URL válida de imagen',
-        ]"
-      />
+      <q-input filled label="Url Imagen *" v-model="newProduct.image" hint="Agregar un Link de imagen para el Producto"
+        lazy-rules :error="!!errors.image" :error-message="errors.image" />
 
-      <q-select
-        label="Categoría"
-        :options="categoryOptions"
-        v-model="newProduct.category"
-      />
+      <q-select label="Categoría" :options="categoryOptions" v-model="newProduct.category" :error="!!errors.category"
+        :error-message="errors.category" />
 
-      <q-input
-        filled
-        lazy-rules
-        step="0.01"
-        :min="0.01"
-        type="number"
-        label="Precio *"
-        v-model="newProduct.price"
-        :rules="[
-          (val) =>
-            (val !== null && val !== '') || 'Por favor ingrese el precio',
-          (val) => !isNaN(val) || 'Ingrese un número válido',
-          (val) =>
-            parseFloat(val) > 0 ||
-            'Por favor ingrese un valor numérico positivo',
-        ]"
-      />
+      <q-input filled lazy-rules step="0.01" :min="0.01" type="number" label="Precio *" v-model="newProduct.price"
+        :error="!!errors.price" :error-message="errors.price" />
 
-      <q-input
-        filled
-        :min="1"
-        lazy-rules
-        type="number"
-        label="Stock *"
-        v-model="newProduct.stock"
-        :rules="[
-          (val) => (val !== null && val !== '') || 'Por favor ingrese el stock',
-          (val) => !isNaN(val) || 'Ingrese un número válido',
-          (val) =>
-            Number(val) > 0 || 'Por favor ingrese un valor numérico positivo',
-        ]"
-      />
+      <q-input filled :min="1" lazy-rules type="number" label="Stock *" v-model="newProduct.stock"
+        :error="!!errors.stock" :error-message="errors.stock" />
 
       <div>
         <q-btn label="Submit" type="submit" color="primary" />
-        <q-btn
-          flat
-          type="reset"
-          label="Reset"
-          color="primary"
-          class="q-ml-sm"
-        />
+        <q-btn flat type="reset" label="Reset" color="primary" class="q-ml-sm" />
       </div>
     </q-form>
   </div>

@@ -23,6 +23,7 @@ export const useProducts = () => {
 
   const editProduct = (product: Product) => {
     // TODO: Implementar request PATCH
+    console.log(product);
   };
 
   // TODO: refactorizar y legibilizar
