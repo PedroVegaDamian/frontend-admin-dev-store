@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { useToastNotification } from "@/shared/composables/useToastNotification";
-import { reactive } from "vue";
+import { useToastNotification } from '@/shared/composables/useToastNotification'
+import { reactive } from 'vue'
 
-const { toastNotification } = useToastNotification();
+const { toastNotification } = useToastNotification()
 
 const credentials = reactive({
-  email: "",
-  password: "",
-});
+	email: '',
+	password: ''
+})
 
 function onSubmit() {
-  toastNotification({
-    color: "black",
-    position: "bottom-right",
-    icon: "check_circle_outline",
-    message: "Sesión Iniciada Correctamente",
-  });
+	toastNotification({
+		color: 'black',
+		position: 'bottom-right',
+		icon: 'check_circle_outline',
+		message: 'Sesión Iniciada Correctamente'
+	})
 }
 </script>
 

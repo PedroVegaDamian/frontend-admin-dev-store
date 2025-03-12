@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  type Emits = (e: "trigger-hide") => void;
+type Emits = (e: 'trigger-hide') => void
 
-  const emit = defineEmits<Emits>();
-  const showDialog = defineModel<boolean>();
+const emit = defineEmits<Emits>()
+const showDialog = defineModel<boolean>()
 </script>
 
 <template>

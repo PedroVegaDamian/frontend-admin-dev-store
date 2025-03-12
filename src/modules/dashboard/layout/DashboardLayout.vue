@@ -1,11 +1,11 @@
 <script setup>
-  import { ref } from "vue";
+import { ref } from 'vue'
 
-  import Header from "../components/TheHeader.vue";
-  import Sidebar from "../components/TheSidebar.vue";
+import Header from '../components/TheHeader.vue'
+import Sidebar from '../components/TheSidebar.vue'
 
-  const drawer = ref(true);
-  const miniState = ref(true);
+const drawer = ref(true)
+const miniState = ref(true)
 </script>
 
 <template>

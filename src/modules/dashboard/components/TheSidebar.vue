@@ -1,18 +1,18 @@
 <script setup lang="ts">
-  import TheSidebarItems from "./TheSidebarItems.vue";
+import TheSidebarItems from './TheSidebarItems.vue'
 
-  interface Props {
-    drawer: boolean;
-    miniState: boolean;
-  }
+interface Props {
+	drawer: boolean
+	miniState: boolean
+}
 
-  interface Emits {
-    (e: "update:miniState", value: boolean): void;
-    (e: "update:drawer", value: boolean): void;
-  }
+interface Emits {
+	(e: 'update:miniState', value: boolean): void
+	(e: 'update:drawer', value: boolean): void
+}
 
-  const props = defineProps<Props>();
-  const emit = defineEmits<Emits>();
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 </script>
 
 <template>

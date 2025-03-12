@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  interface Props {
-    drawer: boolean;
-  }
+interface Props {
+	drawer: boolean
+}
 
-  interface Emits {
-    (e: "update:drawer", drawer: boolean): void;
-  }
+type Emits = (e: 'update:drawer', drawer: boolean) => void
 
-  const props = defineProps<Props>();
-  const emit = defineEmits<Emits>();
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 export const paths = {
-  login: "/",
-  dashboard: {
-    home: "/dashboard",
-    products: "/dashboard/productos",
-  },
-};
+	login: '/',
+	dashboard: {
+		home: '/dashboard',
+		products: '/dashboard/productos'
+	}
+}

@@ -1,9 +1,9 @@
-import { useQuasar, type QNotifyCreateOptions } from "quasar";
+import { type QNotifyCreateOptions, useQuasar } from 'quasar'
 
 export const useToastNotification = () => {
-  const $q = useQuasar();
+	const $q = useQuasar()
 
-  return {
-    toastNotification: (options: QNotifyCreateOptions) => $q.notify(options),
-  };
-};
+	return {
+		toastNotification: (options: QNotifyCreateOptions) => $q.notify(options)
+	}
+}
