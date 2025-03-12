@@ -1,6 +1,5 @@
 import { computed, ref, watch } from "vue";
 
-import type { Product, ProductDto } from "../interfaces/product";
 import { useCreateProduct } from "./useCreateProduct";
 import { useDeleteProduct } from "./useDeleteProduct";
 import { useGetProducts } from "./useGetProducts";

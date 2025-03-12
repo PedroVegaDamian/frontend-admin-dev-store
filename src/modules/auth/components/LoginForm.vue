@@ -1,24 +1,22 @@
 <script setup lang="ts">
-  import { useToastNotification } from "@/shared/composables/useToastNotification";
-  import { reactive } from "vue";
+import { useToastNotification } from "@/shared/composables/useToastNotification";
+import { reactive } from "vue";
 
-  const { toastNotification } = useToastNotification();
+const { toastNotification } = useToastNotification();
 
-  const credentials = reactive({
-    email: "",
-    password: "",
+const credentials = reactive({
+  email: "",
+  password: "",
+});
+
+function onSubmit() {
+  toastNotification({
+    color: "black",
+    position: "bottom-right",
+    icon: "check_circle_outline",
+    message: "Sesión Iniciada Correctamente",
   });
-
-  function onSubmit() {
-    console.log({ ...credentials });
-
-    toastNotification({
-      color: "black",
-      position: "bottom-right",
-      icon: "check_circle_outline",
-      message: "Sesión Iniciada Correctamente",
-    });
-  }
+}
 </script>
 
 <template>
@@ -32,32 +30,12 @@
       </div>
 
       <form @submit.prevent="onSubmit">
-        <q-input
-          outlined
-          stack-label
-          class="mb-3"
-          color="black"
-          label="Tu correo *"
-          v-model="credentials.email"
-        />
+        <q-input outlined stack-label class="mb-3" color="black" label="Tu correo *" v-model="credentials.email" />
 
-        <q-input
-          outlined
-          stack-label
-          class="mb-6"
-          color="black"
-          type="password"
-          label="Tu contraseña *"
-          v-model="credentials.password"
-        />
+        <q-input outlined stack-label class="mb-6" color="black" type="password" label="Tu contraseña *"
+          v-model="credentials.password" />
 
-        <q-btn
-          no-caps
-          type="submit"
-          color="black"
-          style="width: 100%"
-          label="Iniciar Sesión"
-        />
+        <q-btn no-caps type="submit" color="black" style="width: 100%" label="Iniciar Sesión" />
       </form>
     </div>
   </div>

@@ -44,7 +44,7 @@ export const addProduct = async (product: ProductDto) => {
     });
 
     if (!response.ok)
-      throw new Error(`Error al agregar prodcuto: ${response.statusText}`);
+      throw new Error(`Error al agregar producto: ${response.statusText}`);
 
     const data = await response.json();
     return data as Product;
