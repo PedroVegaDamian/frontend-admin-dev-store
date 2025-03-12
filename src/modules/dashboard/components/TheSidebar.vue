@@ -1,22 +1,36 @@
 <script setup lang="ts">
-import RouterDashboard from './RouterDashboard.vue';
+import TheSidebarItems from './TheSidebarItems.vue'
 
-defineProps<{ drawer: boolean, miniState: boolean, opacity?: string }>()
+interface Props {
+	drawer: boolean
+	miniState: boolean
+}
 
-const emit = defineEmits(['update:miniState', 'update:drawer'])
+interface Emits {
+	(e: 'update:miniState', value: boolean): void
+	(e: 'update:drawer', value: boolean): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 </script>
 
 <template>
-  <q-drawer :model-value="drawer" show-if-above :mini="miniState" @mouseenter="emit('update:miniState', false)"
-    @mouseleave="emit('update:miniState', true)" :width="200" :breakpoint="500" bordered
-    :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
+  <q-drawer
+    bordered
+    :width="200"
+    show-if-above
+    :breakpoint="500"
+    :mini="props.miniState"
+    :model-value="props.drawer"
+    @mouseleave="emit('update:miniState', true)"
+    @mouseenter="emit('update:miniState', false)"
+    :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+  >
     <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
       <q-list padding>
-
-        <RouterDashboard />
-
+        <TheSidebarItems />
       </q-list>
     </q-scroll-area>
   </q-drawer>
-
 </template>
